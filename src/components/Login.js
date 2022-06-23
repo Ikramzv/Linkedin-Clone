@@ -34,7 +34,6 @@ function Login(props) {
                 <Hero>
                     <h1>Welcome to your professional community</h1>
                     <img  src="/images/login-hero.svg" alt="hero image" />
-                    
                 </Hero>
                 <Form>
                     <Google onClick={() => props.signIn()} >
@@ -113,6 +112,7 @@ const SignIn = styled.button`
 const Section = styled.section`
     display: flex;
     align-content: flex-start;
+    height: 80vh;
     min-height: auto;
     padding-bottom: 138px;
     padding-top: 40px;
@@ -124,6 +124,7 @@ const Section = styled.section`
     align-items: center;
     margin: auto;
     @media (max-width: 768px) {
+        height: initial;
         min-height: 0;
         margin: auto;
     }
@@ -148,12 +149,16 @@ const Hero = styled.div`
     }
 
     img {
-        z-index: -1;
-        width: 700px;
+        z-index: 100;
+        width: 650px;
         height: 670px;
         position: absolute;
-        bottom: -2px;
-        right: -150px;
+        bottom: 50px;
+        right: 20px;
+        @media (max-width: 1250px) {
+            right: 0;
+            width: 600px;
+        }
         @media (max-width: 768px) {
             top: 230px;
             width: initial;
