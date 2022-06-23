@@ -1,3 +1,6 @@
+# Go to App
+https://linkedin-clone-db7fd.web.app/
+
 # Tools , Libraries used during building this project
 
 I have used React , Firebase , Redux , Thunk middleware , React Player , React icons ,Google Authentication , styled components , react-router-dom for building this project.
