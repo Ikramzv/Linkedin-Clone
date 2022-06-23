@@ -16,6 +16,11 @@ export const setLoading = (status) => ({
     status: status
 })
 
+export const deleteDocument = (status) => ({
+    type: 'DELETE_DOCUMENT',
+    status: status
+})
+
 export const getArticles = (payload) => ({
     type: GET_ARTICLES,
     payload: payload
@@ -106,7 +111,7 @@ export function getArticlesAPI() {
         const q = query(collectionRef , orderBy('actor.date' , 'desc'))
         getDocs(q).then((snapshot) =>{
             payload = snapshot.docs.map((item) => {
-                return item.data()
+                return {...item.data() , id: item.id}
             })
             dispatch(getArticles(payload))
             console.log(payload)
@@ -115,9 +120,14 @@ export function getArticlesAPI() {
 }
 
 
-// export function deleteArticleAPI() {
-//     return (dispatch) => {
-//         const collectionRef = collection(db,'articles')
-//         deleteDoc(doc(collectionRef , ))
-//     }
-// }
+export function deleteArticleAPI(id) {
+    return (dispatch) => {
+        dispatch(deleteDocument(true))
+        const collectionRef = collection(db,'articles')
+        deleteDoc(doc(collectionRef , id)).then(() => {
+            setTimeout(() => {
+                dispatch(deleteDocument(false))
+            }, 1000);
+        })
+    }
+}

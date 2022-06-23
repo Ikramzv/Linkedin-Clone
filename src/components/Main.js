@@ -1,18 +1,21 @@
 import React , { useEffect, useState } from "react";
 import styled from "styled-components";
 import { FaPhotoVideo, FaRegCommentDots , FaEllipsisH } from 'react-icons/fa'
-import { MdVideoLibrary, MdEvent } from 'react-icons/md'
+import { MdVideoLibrary, MdEvent, MdDelete } from 'react-icons/md'
 import { RiArticleLine , RiSendPlaneFill } from 'react-icons/ri'
 import { AiOutlineLike } from 'react-icons/ai'
 import { IoMdShareAlt } from 'react-icons/io'
 import { connect } from "react-redux";
 import PostModal from './PostModal'
-import { getArticlesAPI } from "../actions/index";
+import { deleteArticleAPI, getArticlesAPI } from "../actions/index";
 import ReactPlayer from "react-player";
+import DeleteModal from "./deleteModal";
 
 function Main(props) {
     
     const [showModal , setShowModal] = useState('close')
+    const [showDeleteModal , setShowDeleteModal] = useState(false)
+    const [deletedItemId , setDeletedItemId] = useState('')
 
     const handleClick = (e) => {
         e.preventDefault()
@@ -30,6 +33,16 @@ function Main(props) {
                 setShowModal('close')
                 break;
         }
+    }
+
+    // console.log(doc(collection(db , 'articles') , "/id = e5IUeH6AehSunOU1l3cp"))
+
+    function deleteDocument() {
+        if(showDeleteModal) {
+            setShowDeleteModal(false)
+        }
+
+        props.deleteDocumentFromFirebase(deletedItemId)
     }
     
     useEffect(() => {
@@ -95,6 +108,10 @@ function Main(props) {
                                             </div>
                                         </a>
                                         <button>
+                                            <MdDelete onClick={() => {
+                                                setShowDeleteModal(!showDeleteModal)
+                                                setDeletedItemId(article.id)
+                                            }}/>
                                             <FaEllipsisH />
                                         </button>
                                     </SharedActor>
@@ -149,6 +166,7 @@ function Main(props) {
                 </Content>
                 }
                 <PostModal showModal={ showModal } getArticles={props.getArticles} handleClick={handleClick} />
+                <DeleteModal showDeleteModal={showDeleteModal} cancelModal = {() => setShowDeleteModal(false)} deleteDocument = {deleteDocument} />
             </Container>
         </>
     )
@@ -281,6 +299,10 @@ const SharedActor = styled.div`
 
     button {
         position: absolute;
+        display: inline-flex;
+        width: 80px;
+        justify-content: space-between;
+        align-items: center;
         right: 12px;
         top: 0;
         background: transparent;
@@ -288,6 +310,16 @@ const SharedActor = styled.div`
         outline: none;
         font-size: 25px;
         color: rgba(0,0,0,0.7);
+
+        svg:first-child {
+            cursor: pointer;
+            :hover {
+                color: rebeccapurple;
+            }
+            :active {
+                transform: scale(1.15);
+            }
+        }
     }
 `
 
@@ -385,7 +417,8 @@ const mapState = (state) => {
 }
 
 const mapDispatch = (dispatch) => ({
-    getArticles: () => dispatch(getArticlesAPI())
+    getArticles: () => dispatch(getArticlesAPI()),
+    deleteDocumentFromFirebase: (id) => dispatch(deleteArticleAPI(id))
 })
 
 export default connect(mapState , mapDispatch)(Main)

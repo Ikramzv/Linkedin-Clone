@@ -1,4 +1,4 @@
-import { SET_LOADING_STATUS , GET_ARTICLES } from "../actions/actionType"
+import { SET_LOADING_STATUS , GET_ARTICLES , DELETE_DOCUMENT } from "../actions/actionType"
 
 export const initState = {
     articles: [],
@@ -14,6 +14,12 @@ const articleReducer = (state = initState , action) => {
             }
         case SET_LOADING_STATUS :
             return  {
+                ...state,
+                loading: action.status
+            }
+        case DELETE_DOCUMENT:
+            console.log('Document deleted' , state)
+            return {
                 ...state,
                 loading: action.status
             }

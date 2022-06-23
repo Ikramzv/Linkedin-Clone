@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { getUserAuth, signInAPI } from '../actions/index'
+import { signInAPI } from '../actions/index'
 import { useNavigate } from 'react-router-dom'
 
 function Login(props) {
